@@ -1,21 +1,14 @@
 import "./App.css";
 import { useState, useRef } from "react";
-
+import {
+  extractDigits,
+  formatFirstSixDigits,
+  formatMorethanSixDigits,
+  formatFirstThreeDigits,
+} from "./helper";
 function App() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const inputRef = useRef(null);
-
-  const extractDigits = (inputString) => {
-    let len = inputString.length;
-    let validNumber = "";
-    for (let i = 0; i < len; i++) {
-      let ascValue = inputString.charCodeAt(i);
-      if (ascValue >= 48 && ascValue <= 57) {
-        validNumber += inputString.charAt(i);
-      }
-    }
-    return validNumber;
-  };
 
   const onInputHandler = (event) => {
     let inputValue = event.target.value;
@@ -27,11 +20,10 @@ function App() {
 
     // formatting the input value
     let phoneNumber = extractDigits(inputValue);
-
     let formattedPhoneNumber = "";
+
     if (phoneNumber.length >= 4) {
-      formattedPhoneNumber =
-        `(${phoneNumber.substring(0, 3)}) ` + phoneNumber.substring(3);
+      formattedPhoneNumber = formatFirstThreeDigits(phoneNumber);
       inputValue = "";
     }
     if (phoneNumber.length === 3) {
@@ -40,19 +32,12 @@ function App() {
     }
 
     if (phoneNumber.length >= 7) {
-      formattedPhoneNumber =
-        `(${phoneNumber.substring(0, 3)}) ` +
-        phoneNumber.substring(3, 6) +
-        "-" +
-        phoneNumber.substring(6);
-
+      formattedPhoneNumber = formatMorethanSixDigits(phoneNumber);
       inputValue = "";
     }
 
     if (phoneNumber.length === 6) {
-      formattedPhoneNumber =
-        `(${phoneNumber.substring(0, 3)}) ` + phoneNumber.substring(3, 6);
-
+      formattedPhoneNumber = formatFirstSixDigits(phoneNumber);
       inputValue = "";
     }
     setPhoneNumber(formattedPhoneNumber + inputValue);
